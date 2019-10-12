@@ -30,10 +30,15 @@ from voikko_sklearn import VoikkoAttributeVectorizer
 
 class VoikkoAttributeVectorizerTest(unittest.TestCase):
 	
-	def testInitAndTerminate(self):
+	def test_init_and_terminate(self):
 		v = VoikkoAttributeVectorizer([])
 		v.terminate()
 
+	def test_build_tokenizer(self):
+		vectorizer = VoikkoAttributeVectorizer([])
+		tokenizer = vectorizer.build_tokenizer()
+		tokens = tokenizer('Kissa ei ole koira. Ei todellakaan ole.')
+		self.assertEqual(['Kissa', 'ei', 'ole', 'koira', 'Ei', 'todellakaan', 'ole'], tokens)
 
 if __name__ == "__main__":
 	suite = unittest.TestLoader().loadTestsFromTestCase(VoikkoAttributeVectorizerTest)

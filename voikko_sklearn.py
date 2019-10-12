@@ -27,14 +27,17 @@
 
 # This library requires Python version 3.5 or newer.
 
+from libvoikko import Voikko, Token
 
 class VoikkoAttributeVectorizer:
 	
 	def __init__(self, attributes, langtag="fi"):
 		self.input = input
 		self.attributes = attributes
-		self.langtag = langtag
+		self.voikko = Voikko(langtag)
 
 	def terminate(self):
-		pass
+		self.voikko.terminate()
 
+	def build_tokenizer(self):
+		return lambda text: [token.tokenText for token in self.voikko.tokens(text) if token.tokenType == Token.WORD]
