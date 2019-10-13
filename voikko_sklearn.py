@@ -35,9 +35,25 @@ class VoikkoAttributeVectorizer:
 		self.input = input
 		self.attributes = attributes
 		self.voikko = Voikko(langtag)
+		self.__init_feature_names()
+
+	def __init_feature_names(self):
+		self.feature_names = []
+		for attribute in self.attributes:
+			values = self.voikko.attributeValues(attribute)
+			if values is None:
+				raise ValueError("Attribute '" + attribute + "' does not exist or is not categorial.")
+			for value in values:
+				self.feature_names.append(attribute + '_' + value)
 
 	def terminate(self):
 		self.voikko.terminate()
 
 	def build_tokenizer(self):
 		return lambda text: [token.tokenText for token in self.voikko.tokens(text) if token.tokenType == Token.WORD]
+
+	def get_feature_names(self):
+		return self.feature_names
+
+	def transform(self, document_list):
+		pass

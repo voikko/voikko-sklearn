@@ -40,6 +40,23 @@ class VoikkoAttributeVectorizerTest(unittest.TestCase):
 		tokens = tokenizer('Kissa ei ole koira. Ei todellakaan ole.')
 		self.assertEqual(['Kissa', 'ei', 'ole', 'koira', 'Ei', 'todellakaan', 'ole'], tokens)
 
+	def test_get_feature_names(self):
+		vectorizer = VoikkoAttributeVectorizer(['NUMBER', 'PERSON'])
+		names = vectorizer.get_feature_names()
+		expected = ['NUMBER_singular', 'NUMBER_plural', 'PERSON_1', 'PERSON_2', 'PERSON_3', 'PERSON_4']
+		self.assertSetEqual(set(expected), set(names))
+
+	def test_get_feature_names_unknown_feature_raises(self):
+		self.assertRaises(ValueError, lambda: VoikkoAttributeVectorizer(['KISSA']))
+
+	def test_get_feature_names_non_categorial_feature_raises(self):
+		self.assertRaises(ValueError, lambda: VoikkoAttributeVectorizer(['BASEFORM']))
+
+	def test_transform(self):
+		vectorizer = VoikkoAttributeVectorizer(['NUMBER'])
+		X = vectorizer.transform(['Kissa ja ja koira.'])
+		# TODO
+
 if __name__ == "__main__":
 	suite = unittest.TestLoader().loadTestsFromTestCase(VoikkoAttributeVectorizerTest)
 	unittest.TextTestRunner(verbosity=1).run(suite)
