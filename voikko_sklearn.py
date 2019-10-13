@@ -28,6 +28,8 @@
 # This library requires Python version 3.5 or newer.
 
 from libvoikko import Voikko, Token
+from scipy.sparse import csr_matrix
+import numpy
 
 class VoikkoAttributeVectorizer:
 	
@@ -45,6 +47,7 @@ class VoikkoAttributeVectorizer:
 				raise ValueError("Attribute '" + attribute + "' does not exist or is not categorial.")
 			for value in values:
 				self.feature_names.append(attribute + '_' + value)
+			self.feature_names.append(attribute + '_unknown')
 
 	def terminate(self):
 		self.voikko.terminate()
@@ -56,4 +59,7 @@ class VoikkoAttributeVectorizer:
 		return self.feature_names
 
 	def transform(self, document_list):
-		pass
+		document_count = len(document_list)
+		vector_length = len(self.feature_names)
+		matrix = csr_matrix((document_count, vector_length), dtype=numpy.float64)
+		return matrix
