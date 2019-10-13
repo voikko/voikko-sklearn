@@ -44,8 +44,9 @@ class VoikkoAttributeVectorizerTest(unittest.TestCase):
 	def test_get_feature_names(self):
 		vectorizer = VoikkoAttributeVectorizer(['NUMBER', 'PERSON'])
 		names = vectorizer.get_feature_names()
-		expected = ['NUMBER_singular', 'NUMBER_plural', 'NUMBER_unknown', 'PERSON_1', 'PERSON_2', 'PERSON_3', 'PERSON_4', 'PERSON_unknown']
+		expected = ['NUMBER_singular', 'NUMBER_plural', 'PERSON_1', 'PERSON_2', 'PERSON_3', 'PERSON_4', 'unknown']
 		self.assertSetEqual(set(expected), set(names))
+		self.assertEqual('unknown', names[0])
 
 	def test_get_feature_names_unknown_feature_raises(self):
 		self.assertRaises(ValueError, lambda: VoikkoAttributeVectorizer(['KISSA']))
@@ -58,6 +59,8 @@ class VoikkoAttributeVectorizerTest(unittest.TestCase):
 		X = vectorizer.transform(['Kissa ja ja koira.'])
 		self.assertIsInstance(X, csr_matrix)
 		self.assertEqual((1, 3), X.shape)
+		data = X.toarray()
+		self.assertEqual(0, data[0][0])
 		# TODO
 
 if __name__ == "__main__":

@@ -40,14 +40,16 @@ class VoikkoAttributeVectorizer:
 		self.__init_feature_names()
 
 	def __init_feature_names(self):
-		self.feature_names = []
+		self.feature_names = ['unknown']
+		self.feature_name_to_index = {'unknown' : 0}
 		for attribute in self.attributes:
 			values = self.voikko.attributeValues(attribute)
 			if values is None:
 				raise ValueError("Attribute '" + attribute + "' does not exist or is not categorial.")
 			for value in values:
-				self.feature_names.append(attribute + '_' + value)
-			self.feature_names.append(attribute + '_unknown')
+				name = attribute + '_' + value
+				self.feature_name_to_index[name] = len(self.feature_names)
+				self.feature_names.append(name)
 
 	def terminate(self):
 		self.voikko.terminate()
@@ -58,8 +60,16 @@ class VoikkoAttributeVectorizer:
 	def get_feature_names(self):
 		return self.feature_names
 
+	def __transform_document(self, document, target_vector):
+		words = self.build_tokenizer()(document)
+		for word in words:
+			analysis_list = self.voikko.analyze(word)
+			# TODO
+
 	def transform(self, document_list):
 		document_count = len(document_list)
 		vector_length = len(self.feature_names)
-		matrix = csr_matrix((document_count, vector_length), dtype=numpy.float64)
-		return matrix
+		data = numpy.zeros((document_count, vector_length), dtype=numpy.float64)
+		for i in range(document_count):
+			self.__transform_document(document_list[i], data[i])
+		return csr_matrix(data)
