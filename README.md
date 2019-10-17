@@ -1,6 +1,6 @@
 # voikko-sklearn
 
-Python modules that extract features from text documents for machine learning. Initially this is mostly for Finnish but may also
+Python modules that extracts features from text documents for machine learning. Initially this is mostly for Finnish but may also
 work for other languages supported by Voikko.
 
 *Note: this is work in progress. The code is not usable yet.*
@@ -21,3 +21,7 @@ to tweak the analyzer.
 
 * Stable releases and stable API (for now). Basic functionality needs to be tested in real world first.
 * Issues that can be fixed at their root (in libvoikko or voikko-fi) should be fixed there instead of working them around here.
+
+## Requirements
+
+* Latest version of libvoikko (Git master may be required)
