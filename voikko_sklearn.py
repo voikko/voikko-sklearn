@@ -64,6 +64,8 @@ class VoikkoAttributeVectorizer:
 	def __transform_document(self, document, target_vector):
 		words = self.build_tokenizer()(document)
 		wordcount = len(words)
+		if wordcount == 0:
+			return
 		for word in words:
 			analysis_list = self.voikko.analyze(word)
 			count = len(analysis_list)

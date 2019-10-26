@@ -26,6 +26,7 @@
 # the terms of any one of the MPL, the GPL or the LGPL.
 
 import unittest
+import numpy as np
 from voikko_sklearn import VoikkoAttributeVectorizer
 from scipy.sparse import csr_matrix
 
@@ -62,6 +63,14 @@ class VoikkoAttributeVectorizerTest(unittest.TestCase):
 		self.assertEqual(0.25, data[0][0]) # unknown
 		self.assertEqual(0, data[0][1]) # plural
 		self.assertEqual(0.5, data[0][2]) # singular
+
+	def test_transform_two_empty_documents(self):
+		vectorizer = VoikkoAttributeVectorizer(['NUMBER'])
+		X = vectorizer.transform(['', '.'])
+		self.assertIsInstance(X, csr_matrix)
+		self.assertEqual((2, 3), X.shape)
+		data = X.toarray()
+		self.assertEqual(0, np.count_nonzero(data))
 
 if __name__ == "__main__":
 	suite = unittest.TestLoader().loadTestsFromTestCase(VoikkoAttributeVectorizerTest)
