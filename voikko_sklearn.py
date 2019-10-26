@@ -46,6 +46,7 @@ class VoikkoAttributeVectorizer:
 			values = self.voikko.attributeValues(attribute)
 			if values is None:
 				raise ValueError("Attribute '" + attribute + "' does not exist or is not categorial.")
+			values.sort()
 			for value in values:
 				name = attribute + '_' + value
 				self.feature_name_to_index[name] = len(self.feature_names)
@@ -62,9 +63,19 @@ class VoikkoAttributeVectorizer:
 
 	def __transform_document(self, document, target_vector):
 		words = self.build_tokenizer()(document)
+		wordcount = len(words)
 		for word in words:
 			analysis_list = self.voikko.analyze(word)
-			# TODO
+			count = len(analysis_list)
+			if count == 0:
+				target_vector[0] += 1
+			else:
+				for analysis in analysis_list:
+					for attribute in self.attributes:
+						if attribute in analysis:
+							value = analysis[attribute]
+							target_vector[self.feature_name_to_index[attribute + "_" + value]] += 1
+		target_vector /= wordcount
 
 	def transform(self, document_list):
 		document_count = len(document_list)

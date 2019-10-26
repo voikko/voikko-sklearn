@@ -44,9 +44,8 @@ class VoikkoAttributeVectorizerTest(unittest.TestCase):
 	def test_get_feature_names(self):
 		vectorizer = VoikkoAttributeVectorizer(['NUMBER', 'PERSON'])
 		names = vectorizer.get_feature_names()
-		expected = ['NUMBER_singular', 'NUMBER_plural', 'PERSON_1', 'PERSON_2', 'PERSON_3', 'PERSON_4', 'unknown']
-		self.assertSetEqual(set(expected), set(names))
-		self.assertEqual('unknown', names[0])
+		expected = ['unknown', 'NUMBER_plural', 'NUMBER_singular', 'PERSON_1', 'PERSON_2', 'PERSON_3', 'PERSON_4']
+		self.assertEqual(expected, names)
 
 	def test_get_feature_names_unknown_feature_raises(self):
 		self.assertRaises(ValueError, lambda: VoikkoAttributeVectorizer(['KISSA']))
@@ -56,12 +55,13 @@ class VoikkoAttributeVectorizerTest(unittest.TestCase):
 
 	def test_transform(self):
 		vectorizer = VoikkoAttributeVectorizer(['NUMBER'])
-		X = vectorizer.transform(['Kissa ja ja koira.'])
+		X = vectorizer.transform(['Kissa ja jaf koira.'])
 		self.assertIsInstance(X, csr_matrix)
 		self.assertEqual((1, 3), X.shape)
 		data = X.toarray()
-		self.assertEqual(0, data[0][0])
-		# TODO
+		self.assertEqual(0.25, data[0][0]) # unknown
+		self.assertEqual(0, data[0][1]) # plural
+		self.assertEqual(0.5, data[0][2]) # singular
 
 if __name__ == "__main__":
 	suite = unittest.TestLoader().loadTestsFromTestCase(VoikkoAttributeVectorizerTest)
