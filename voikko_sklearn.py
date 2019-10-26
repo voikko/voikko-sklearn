@@ -31,7 +31,26 @@ from libvoikko import Voikko, Token
 from scipy.sparse import csr_matrix
 import numpy
 
+
 class VoikkoAttributeVectorizer:
+	"""Converts a collection of text documents to a matrix of counts of words
+	having specific value for enumerated morphological analysis attributes.
+	
+	Examples
+	--------
+	>>> from voikko_sklearn import VoikkoAttributeVectorizer
+	>>> corpus = [
+	...     'Koiran karvat olivat takussa.',
+	...     'Kissamme goli vanha.'
+	... ]
+	>>> vectorizer = VoikkoAttributeVectorizer(['NUMBER', 'PERSON'], langtag='fi')
+	>>> print(vectorizer.get_feature_names())
+	['unknown', 'NUMBER_plural', 'NUMBER_singular', 'PERSON_1', 'PERSON_2', 'PERSON_3', 'PERSON_4']
+	>>> X = vectorizer.transform(corpus)
+	>>> print(X.toarray())
+	[[0.         0.5        0.5        0.         0.         0.25       0.        ]
+	[0.33333333 0.         0.66666667 0.         0.         0.         0.        ]]
+	"""
 	
 	def __init__(self, attributes, langtag="fi"):
 		self.input = input

@@ -3,8 +3,6 @@
 Python modules that extracts features from text documents for machine learning. Initially this is mostly for Finnish but may also
 work for other languages supported by Voikko.
 
-*Note: this is work in progress. The code is not usable yet.*
-
 ## Design goals
 
 * The modules should have similar interface as those in
