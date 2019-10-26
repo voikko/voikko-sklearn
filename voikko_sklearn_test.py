@@ -54,6 +54,11 @@ class VoikkoAttributeVectorizerTest(unittest.TestCase):
 	def test_get_feature_names_non_categorial_feature_raises(self):
 		self.assertRaises(ValueError, lambda: VoikkoAttributeVectorizer(['BASEFORM']))
 
+	def test_fit(self):
+		vectorizer = VoikkoAttributeVectorizer(['NUMBER'])
+		# fit should not do anything, just return self
+		self.assertIs(vectorizer, vectorizer.fit(['Kissa ei ole koira.']))
+
 	def test_transform(self):
 		vectorizer = VoikkoAttributeVectorizer(['NUMBER'])
 		X = vectorizer.transform(['Kissa ja jaf koira.'])
@@ -71,6 +76,12 @@ class VoikkoAttributeVectorizerTest(unittest.TestCase):
 		self.assertEqual((2, 3), X.shape)
 		data = X.toarray()
 		self.assertEqual(0, np.count_nonzero(data))
+
+	def test_fit_transform(self):
+		# should do the same as fit
+		vectorizer = VoikkoAttributeVectorizer(['NUMBER'])
+		X = vectorizer.fit_transform(['Kissa ja jaf koira.'])
+		self.assertIsInstance(X, csr_matrix)
 
 if __name__ == "__main__":
 	suite = unittest.TestLoader().loadTestsFromTestCase(VoikkoAttributeVectorizerTest)

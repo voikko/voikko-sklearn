@@ -86,3 +86,9 @@ class VoikkoAttributeVectorizer:
 		for i in range(document_count):
 			self.__transform_document(document_list[i], data[i])
 		return csr_matrix(data)
+
+	def fit(self, document_list):
+		return self
+
+	def fit_transform(self, document_list):
+		return self.transform(document_list)
