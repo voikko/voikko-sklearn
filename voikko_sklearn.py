@@ -95,7 +95,7 @@ class VoikkoAttributeVectorizer:
 					for attribute in self.attributes:
 						if attribute in analysis:
 							value = analysis[attribute]
-							target_vector[self.feature_name_to_index[attribute + "_" + value]] += 1
+							target_vector[self.feature_name_to_index[attribute + "_" + value]] += 1.0 / count
 		target_vector /= wordcount
 
 	def transform(self, document_list):

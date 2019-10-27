@@ -77,6 +77,14 @@ class VoikkoAttributeVectorizerTest(unittest.TestCase):
 		data = X.toarray()
 		self.assertEqual(0, np.count_nonzero(data))
 
+	def test_transform_ambiguity(self):
+		vectorizer = VoikkoAttributeVectorizer(['MOOD'])
+		X = vectorizer.transform(['tulen'])
+		self.assertEqual((1, 10), X.shape)
+		data = X.toarray()
+		self.assertEqual(1, np.count_nonzero(data))
+		self.assertEqual(0.5, data[0][8])
+
 	def test_fit_transform(self):
 		# should do the same as fit
 		vectorizer = VoikkoAttributeVectorizer(['NUMBER'])
