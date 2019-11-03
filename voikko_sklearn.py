@@ -29,8 +29,13 @@
 
 from libvoikko import Voikko, Token
 from scipy.sparse import csr_matrix
+from sklearn.feature_extraction.text import CountVectorizer
 import numpy
 
+class VoikkoCountVectorizer(CountVectorizer):
+
+	def __init__(self):
+		super().__init__()
 
 class VoikkoAttributeVectorizer:
 	"""Converts a collection of text documents to a matrix of counts of words

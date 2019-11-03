@@ -27,7 +27,7 @@
 
 import unittest
 import numpy as np
-from voikko_sklearn import VoikkoAttributeVectorizer
+from voikko_sklearn import VoikkoAttributeVectorizer, VoikkoCountVectorizer
 from scipy.sparse import csr_matrix
 
 class VoikkoAttributeVectorizerTest(unittest.TestCase):
@@ -91,6 +91,19 @@ class VoikkoAttributeVectorizerTest(unittest.TestCase):
 		X = vectorizer.fit_transform(['Kissa ja jaf koira.'])
 		self.assertIsInstance(X, csr_matrix)
 
+
+class VoikkoCountVectorizerTest(unittest.TestCase):
+
+	def test_works_as_count_vectorizer_for_unknown_words(self):
+		vectorizer = VoikkoCountVectorizer()
+		X = vectorizer.fit_transform(['Allefsf nodfte nodfte blää.'])
+		self.assertEqual(['allefsf', 'blää', 'nodfte'], vectorizer.get_feature_names())
+		self.assertEqual((1, 3), X.shape)
+		data = X.toarray()[0]
+		self.assertEqual(1, data[0])
+		self.assertEqual(1, data[1])
+		self.assertEqual(2, data[2])
+
 if __name__ == "__main__":
-	suite = unittest.TestLoader().loadTestsFromTestCase(VoikkoAttributeVectorizerTest)
-	unittest.TextTestRunner(verbosity=1).run(suite)
+	suites = [unittest.TestLoader().loadTestsFromTestCase(cls) for cls in [VoikkoAttributeVectorizerTest, VoikkoCountVectorizerTest]]
+	unittest.TextTestRunner(verbosity=1).run(unittest.TestSuite(suites))
