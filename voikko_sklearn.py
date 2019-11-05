@@ -34,8 +34,28 @@ import numpy
 
 class VoikkoCountVectorizer(CountVectorizer):
 
-	def __init__(self):
+	def __init__(self, langtag="fi"):
+		self.voikko = Voikko(langtag)
 		super().__init__()
+
+	def terminate(self):
+		self.voikko.terminate()
+
+	def build_analyzer(self):
+		def analyse_word(word):
+			baseform = None
+			for analysis in self.voikko.analyze(word):
+				if "BASEFORM" in analysis:
+					new_baseform = analysis["BASEFORM"]
+					if baseform is not None and baseform != new_baseform:
+						return word.lower()
+					baseform = new_baseform
+				else:
+					return word.lower()
+			if baseform is None:
+				return word.lower()
+			return baseform
+		return lambda text: [analyse_word(token.tokenText) for token in self.voikko.tokens(text) if token.tokenType == Token.WORD]
 
 class VoikkoAttributeVectorizer:
 	"""Converts a collection of text documents to a matrix of counts of words

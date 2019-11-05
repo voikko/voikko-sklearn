@@ -104,6 +104,18 @@ class VoikkoCountVectorizerTest(unittest.TestCase):
 		self.assertEqual(1, data[1])
 		self.assertEqual(2, data[2])
 
+	def test_unambiguous_words_are_lemmatized(self):
+		vectorizer = VoikkoCountVectorizer()
+		X = vectorizer.fit_transform(['Tulen töihin, en elä töillä.'])
+		self.assertEqual(['ei', 'elää', 'tulen', 'työ'], vectorizer.get_feature_names())
+		self.assertEqual((1, 4), X.shape)
+		data = X.toarray()[0]
+		self.assertEqual(1, data[0])
+		self.assertEqual(1, data[1])
+		self.assertEqual(1, data[2])
+		self.assertEqual(2, data[3])
+		vectorizer.terminate()
+
 if __name__ == "__main__":
 	suites = [unittest.TestLoader().loadTestsFromTestCase(cls) for cls in [VoikkoAttributeVectorizerTest, VoikkoCountVectorizerTest]]
 	unittest.TextTestRunner(verbosity=1).run(unittest.TestSuite(suites))
