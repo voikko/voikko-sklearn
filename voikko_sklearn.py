@@ -34,18 +34,25 @@ import numpy
 
 class VoikkoCountVectorizer(CountVectorizer):
 
-	def __init__(self, langtag="fi", binary=False):
+	FINNISH_STOPWORD_CLASSES = ["huudahdussana", "seikkasana", "lukusana", "asemosana", "sidesana", "suhdesana", "kieltosana"]
+
+	def __init__(self, langtag="fi", binary=False, stop_word_classes=[]):
 		self.voikko = Voikko(langtag)
+		self.stop_word_classes = set(stop_word_classes)
 		super().__init__(binary=binary)
 
 	def terminate(self):
 		self.voikko.terminate()
 
 	def build_analyzer(self):
+		check_stop_words = len(self.stop_word_classes) > 0
 		def analyse_word(word):
 			baseform = None
+			is_stop_word = False
 			for analysis in self.voikko.analyze(word):
-				if "BASEFORM" in analysis:
+				if check_stop_words and "CLASS" in analysis and analysis["CLASS"] in self.stop_word_classes:
+					is_stop_word = True
+				elif "BASEFORM" in analysis:
 					new_baseform = analysis["BASEFORM"]
 					if baseform is not None and baseform != new_baseform:
 						return word.lower()
@@ -53,9 +60,16 @@ class VoikkoCountVectorizer(CountVectorizer):
 				else:
 					return word.lower()
 			if baseform is None:
+				if is_stop_word:
+					return None
 				return word.lower()
 			return baseform
-		return lambda text: [analyse_word(token.tokenText) for token in self.voikko.tokens(text) if token.tokenType == Token.WORD]
+		def analyse_text(text):
+			baseforms = [analyse_word(token.tokenText) for token in self.voikko.tokens(text) if token.tokenType == Token.WORD]
+			if check_stop_words:
+				return [baseform for baseform in baseforms if baseform is not None]
+			return baseforms
+		return analyse_text
 
 class VoikkoAttributeVectorizer:
 	"""Converts a collection of text documents to a matrix of counts of words

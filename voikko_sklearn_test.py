@@ -125,6 +125,17 @@ class VoikkoCountVectorizerTest(unittest.TestCase):
 		self.assertEqual(1, data[0])
 		vectorizer.terminate()
 
+	def test_stop_word_classes(self):
+		vectorizer = VoikkoCountVectorizer(stop_word_classes=VoikkoCountVectorizer.FINNISH_STOPWORD_CLASSES)
+		X = vectorizer.fit_transform(['Tulen töihin, en elä töillä.'])
+		self.assertEqual(['elää', 'tulen', 'työ'], vectorizer.get_feature_names())
+		self.assertEqual((1, 3), X.shape)
+		data = X.toarray()[0]
+		self.assertEqual(1, data[0])
+		self.assertEqual(1, data[1])
+		self.assertEqual(2, data[2])
+		vectorizer.terminate()
+
 if __name__ == "__main__":
 	suites = [unittest.TestLoader().loadTestsFromTestCase(cls) for cls in [VoikkoAttributeVectorizerTest, VoikkoCountVectorizerTest]]
 	unittest.TextTestRunner(verbosity=1).run(unittest.TestSuite(suites))
