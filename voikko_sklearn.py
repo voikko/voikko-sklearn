@@ -34,9 +34,9 @@ import numpy
 
 class VoikkoCountVectorizer(CountVectorizer):
 
-	def __init__(self, langtag="fi"):
+	def __init__(self, langtag="fi", binary=False):
 		self.voikko = Voikko(langtag)
-		super().__init__()
+		super().__init__(binary=binary)
 
 	def terminate(self):
 		self.voikko.terminate()

@@ -116,6 +116,15 @@ class VoikkoCountVectorizerTest(unittest.TestCase):
 		self.assertEqual(2, data[3])
 		vectorizer.terminate()
 
+	def test_binary(self):
+		vectorizer = VoikkoCountVectorizer(binary=True)
+		X = vectorizer.fit_transform(['Kissa, kissan.'])
+		self.assertEqual(['kissa'], vectorizer.get_feature_names())
+		self.assertEqual((1, 1), X.shape)
+		data = X.toarray()[0]
+		self.assertEqual(1, data[0])
+		vectorizer.terminate()
+
 if __name__ == "__main__":
 	suites = [unittest.TestLoader().loadTestsFromTestCase(cls) for cls in [VoikkoAttributeVectorizerTest, VoikkoCountVectorizerTest]]
 	unittest.TextTestRunner(verbosity=1).run(unittest.TestSuite(suites))
