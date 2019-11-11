@@ -22,4 +22,22 @@ to tweak the analyzer.
 
 ## Requirements
 
-* Latest version of libvoikko (Git master may be required)
+* libvoikko 4.3 or later
+
+### My OS does not have sufficiently new version of libvoikko, what to do?
+
+On Debian based systems including Ubuntu you can use the following commands to install development snapshot of latest libvoikko:
+```
+$ mkdir /tmp/voikko
+$ cd /tmp/voikko
+$ git clone https://github.com/voikko/debian-packages
+$ debian-packages/tools/makevoikkodeb libvoikko
+[The script will complain if some required dependencies are missing.
+If that happens install the required packages and try the command again.]
+$ sudo dpkg -i *.deb
+```
+The same procedure can be used for voikko-fi (just replace libvoikko with voikko-fi above).
+
+Both libvoikko and voikko-fi are carefully developed and master branch is throughly tested so using it should work fine
+for development work. The makevoikkodeb script also allows you to specify a release tag or commit id in case you want to build
+a specific version instead of latest master.
