@@ -26,6 +26,8 @@ to tweak the analyzer.
 
 ### My OS does not have sufficiently new version of libvoikko, what to do?
 
+#### On Linux
+
 On Debian based systems including Ubuntu you can use the following commands to install development snapshot of latest libvoikko:
 ```
 $ mkdir /tmp/voikko
@@ -41,3 +43,11 @@ The same procedure can be used for voikko-fi (just replace libvoikko with voikko
 Both libvoikko and voikko-fi are carefully developed and master branch is throughly tested so using it should work fine
 for development work. The makevoikkodeb script also allows you to specify a release tag or commit id in case you want to build
 a specific version instead of latest master.
+
+#### On macOS ####
+
+Using Homebrew
+```
+brew install libvoikko
+```
+you can install both libvoikko and Finnish dictionary (voikko-fi). Nothing else is needed.
