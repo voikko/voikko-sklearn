@@ -49,5 +49,6 @@ a specific version instead of latest master.
 Using Homebrew
 ```
 brew install libvoikko
+pip3 install libvoikko
 ```
 you can install both libvoikko and Finnish dictionary (voikko-fi). Nothing else is needed.
