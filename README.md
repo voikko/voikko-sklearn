@@ -23,6 +23,7 @@ to tweak the analyzer.
 ## Requirements
 
 * libvoikko 4.3 or later
+* ```pip3 install scikit-learn```
 
 ### My OS does not have sufficiently new version of libvoikko, what to do?
 
