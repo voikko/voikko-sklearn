@@ -53,3 +53,12 @@ brew install libvoikko
 pip3 install libvoikko
 ```
 you can install both libvoikko and Finnish dictionary (voikko-fi). Nothing else is needed.
+
+#### On Windows
+
+Find the latest version of libvoikko-1.dll (32 or 64 bit according to your Python interpreter version) from
+https://www.puimula.org/htp/testing/voikko-sdk/win-crossbuild/ and copy it somewhere in your $PATH.
+Then ```pip3 install libvoikko```
+
+In case you run into errors there are more detailed instructions here: https://voikko.puimula.org/python.html
+
