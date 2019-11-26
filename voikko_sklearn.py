@@ -33,8 +33,16 @@ from sklearn.feature_extraction.text import CountVectorizer
 import numpy
 
 class VoikkoCountVectorizer(CountVectorizer):
+	"""Converts a collection of text documents to a matrix of lemmatized token counts.
+	
+	This is similar to scikit-learn CountVectorizer but uses Voikko for tokenization and
+	lemmatization. Additionally stop words can be specified using word classes that are
+	considered irrelevant for particular task.
+	"""
 
 	FINNISH_STOPWORD_CLASSES = ["huudahdussana", "seikkasana", "lukusana", "asemosana", "sidesana", "suhdesana", "kieltosana"]
+	"""List of closed word classes for Finnish analyzer. Use these if you want to concentrate the analysis on nouns, verbs and
+	adjectives only."""
 
 	def __init__(self, langtag="fi", binary=False, stop_word_classes=[]):
 		self.voikko = Voikko(langtag)
